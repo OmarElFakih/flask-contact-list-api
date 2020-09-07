@@ -17,3 +17,26 @@ class User(db.Model):
             "email": self.email,
             # do not serialize the password, its a security breach
         }
+
+Contact_Group_link = db.Table("links",
+    db.Column("id_contact", db.Integer, db.ForeignKey("Contact.id"), primary_key=True),
+    db.Column("id_group", db.Integer, db.ForeignKey("Group.id"), primary_key=True)
+)
+
+class Contact(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    full_name = db.Column(db.String(80), nullable=False)
+    email = db.Column(db.String(80), nullable=False)
+    address = db.Column(db.String(80))
+    phone = db.Column(db.String(80))
+
+    
+
+
+
+
+
+class Group(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(80), nullable=False)
+    contacts = db.relationship("Contact", secondary="links", lazy='subquery', backref = db.backref("groups", lazy=True))
